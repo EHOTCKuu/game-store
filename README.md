@@ -57,10 +57,10 @@
 ## Скриншоты
 
 **Каталог**
-![Каталог](./catalog.webp)
+![Каталог](./public/catalog.webp)
 
 **Карточка игры**
-![Карточка игры](./product-card.webp)
+![Карточка игры](./public/product-card.webp)
 
 **Оформление заказа**
-![Оформление заказа](./checkout.webp)
+![Оформление заказа](./public/checkout.webp)
