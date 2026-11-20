@@ -1,0 +1,37 @@
+@use '../../styles/variables' as *;
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  border-radius: $radius;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all $transition;
+
+  &.primary {
+    background-color: $accent-blue;
+    color: $bg-dark;
+    
+    &:hover:not(:disabled) {
+      background-color: $accent-blue-hover;
+      transform: translateY(-1px);
+    }
+  }
+
+  &.outline {
+    background-color: transparent;
+    color: $accent-blue;
+    border: 1px solid $accent-blue;
+
+    &:hover:not(:disabled) {
+      background-color: rgba($accent-blue, 0.1);
+    }
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}

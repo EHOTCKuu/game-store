@@ -1,0 +1,18 @@
+@use '../../styles/variables' as *;
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    $bg-card 25%,
+    lighten($bg-card, 5%) 50%,
+    $bg-card 75%
+  );
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite linear;
+  border-radius: $radius;
+}
+
+@keyframes loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}

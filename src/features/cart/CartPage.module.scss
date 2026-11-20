@@ -1,0 +1,183 @@
+@use '../../styles/variables' as *;
+
+.cartPage {
+  display: flex;
+  gap: 32px;
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+  align-items: flex-start;
+  
+  @media (max-width: 768px) {
+    flex-direction: column;
+    padding: 16px;
+  }
+}
+
+.itemsList {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.cartItem {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background-color: $bg-card;
+  padding: 16px;
+  border-radius: $radius;
+  
+  @media (max-width: 500px) {
+    flex-wrap: wrap; // Позволяет элементам переноситься на новую строку на узких экранах
+  }
+}
+
+.image {
+  width: 60px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.itemInfo {
+  flex-grow: 1;
+  min-width: 120px; // Чтобы текст не сжимался слишком сильно
+  
+  h3 {
+    font-size: 16px;
+    margin-bottom: 4px;
+  }
+}
+
+.price {
+  color: $text-muted;
+  font-size: 14px;
+}
+
+.quantityControls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: $bg-dark;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+.quantityBtn {
+  color: $accent-blue;
+  font-size: 18px;
+  font-weight: bold;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  &:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+}
+
+.itemTotal {
+  font-weight: 700;
+  width: 80px;
+  text-align: right;
+}
+
+.removeBtn {
+  color: $text-muted;
+  font-size: 18px;
+  padding: 8px;
+  transition: color $transition;
+  
+  &:hover {
+    color: #ff4d4d;
+  }
+}
+
+.summary {
+  width: 320px;
+  background-color: $bg-card;
+  padding: 24px;
+  border-radius: $radius;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+  
+  h2 {
+    font-size: 20px;
+  }
+}
+
+.promoBlock {
+  display: flex;
+  gap: 8px;
+  width: 100%; // Занимает всю ширину контейнера
+}
+
+.promoInput {
+  flex: 1; // Растягивает инпут на оставшееся место
+  min-width: 0; // Важно! Не дает инпуту вылезать за пределы flex-контейнера
+  padding: 8px 12px;
+  background-color: $bg-dark;
+  border: 1px solid rgba($text-muted, 0.2);
+  border-radius: 6px;
+  color: $text-main;
+  outline: none;
+
+  &:focus {
+    border-color: $accent-blue;
+  }
+}
+
+// Кнопка "Применить" (если она у тебя с классом)
+.promoBlock button {
+  flex-shrink: 0; // Запрещаем кнопке сжиматься
+  padding: 8px 12px;
+}
+
+.errorText {
+  color: #ff4d4d;
+  font-size: 13px;
+}
+
+.successText {
+  color: #4ade80;
+  font-size: 13px;
+}
+
+.totalRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 18px;
+  font-weight: 700;
+  padding-top: 16px;
+  border-top: 1px solid rgba($text-muted, 0.2);
+}
+
+.checkoutBtn {
+  width: 100%;
+  padding: 12px;
+}
+
+.emptyState {
+  text-align: center;
+  margin-top: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  
+  p {
+    color: $text-muted;
+    margin-bottom: 8px;
+  }
+}

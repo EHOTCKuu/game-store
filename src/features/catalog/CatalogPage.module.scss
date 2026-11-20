@@ -1,0 +1,60 @@
+@use '../../styles/variables' as *;
+
+.catalogPage {
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.controls {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+}
+
+.searchInput,
+.select {
+  padding: 10px 16px;
+  background-color: $bg-card;
+  border: 1px solid rgba($text-muted, 0.2);
+  border-radius: $radius;
+  color: $text-main;
+  font-size: 14px;
+  outline: none;
+  transition: border-color $transition;
+
+  &:focus {
+    border-color: $accent-blue;
+  }
+}
+
+.searchInput {
+  flex-grow: 1;
+  min-width: 200px;
+}
+
+.select {
+  cursor: pointer;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 24px;
+  
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr; // Одна колонка на маленьких экранах
+  }
+}
+
+.cardSkeleton {
+  height: 420px;
+}
+
+.empty {
+  text-align: center;
+  color: $text-muted;
+  margin-top: 64px;
+  font-size: 18px;
+}
