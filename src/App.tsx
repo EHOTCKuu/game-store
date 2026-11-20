@@ -37,7 +37,7 @@ const Header = () => {
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/game-store">
       <Header />
       <main>
         <Routes>
