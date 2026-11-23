@@ -33,15 +33,13 @@
 
 ## Структура
 
-- **src/assets** — сгенерированные обложки
+- **src/api** — слой работы с внешним API (FreeToGame)
 - **src/components** — общие UI-элементы (Button, Modal, Skeleton, GameCard)
-- **src/data** — games.json с моковыми данными
-- **src/features/catalog** — каталог, фильтры, сортировка
+- **src/features/catalog** — каталог, фильтры, сортировка, пагинация
 - **src/features/cart** — корзина, промокоды, форма заказа
 - **src/store** — настройка Redux store и типизированные хуки
 - **src/styles** — переменные и глобальные стили
 - **src/types** — типы (Game, CartItem)
-- **scripts** — генератор обложек
 
 ## Запуск
 
@@ -57,10 +55,10 @@
 ## Скриншоты
 
 **Каталог**
-![Каталог](./public/catalog.webp)
+![Каталог](./docs/catalog.webp)
 
 **Карточка игры**
-![Карточка игры](./public/product-card.webp)
+![Карточка игры](./docs/product-card.webp)
 
 **Оформление заказа**
-![Оформление заказа](./public/checkout.webp)
+![Оформление заказа](./docs/checkout.webp)

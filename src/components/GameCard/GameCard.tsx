@@ -5,6 +5,7 @@ import { addToCart, removeFromCart, updateQuantity } from '../../features/cart/c
 import { Button } from '../Button/Button';
 import { Modal } from '../Modal/Modal';
 import { GameDetailsModal } from '../GameDetailsModal/GameDetailsModal';
+import { GameImage } from '../GameImage/GameImage';
 import styles from './GameCard.module.scss';
 
 interface GameCardProps {
@@ -15,51 +16,31 @@ export const GameCard = ({ game }: GameCardProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const dispatch = useAppDispatch();
   
-  // Проверяем, есть ли эта игра в корзине
   const cartItem = useAppSelector((state) => 
     state.cart.items.find((item) => item.gameId === game.id)
   );
 
-  const coverUrl = new URL(`../../assets/covers/${game.cover}`, import.meta.url).href;
-
-  const handleAddToCart = () => {
-    dispatch(addToCart(game));
-  };
-
+  const handleAddToCart = () => dispatch(addToCart(game));
   const handleIncrease = () => {
-    if (cartItem) {
-      dispatch(updateQuantity({ gameId: game.id, quantity: cartItem.quantity + 1 }));
-    }
+    if (cartItem) dispatch(updateQuantity({ gameId: game.id, quantity: cartItem.quantity + 1 }));
   };
-
   const handleDecrease = () => {
     if (cartItem) {
-      if (cartItem.quantity === 1) {
-        dispatch(removeFromCart(game.id));
-      } else {
-        dispatch(updateQuantity({ gameId: game.id, quantity: cartItem.quantity - 1 }));
-      }
+      if (cartItem.quantity === 1) dispatch(removeFromCart(game.id));
+      else dispatch(updateQuantity({ gameId: game.id, quantity: cartItem.quantity - 1 }));
     }
   };
 
   return (
     <>
-      <div className={styles.card}>
-        <div 
-          className={styles.imageWrapper} 
-          onClick={() => setIsModalOpen(true)} 
-          style={{ cursor: 'pointer' }}
-        >
-          <img src={coverUrl} alt={game.title} className={styles.image} loading="lazy" />
+      <div className={styles.card} style={{ background: game.gradient }}>
+        <div className={styles.imageWrapper} onClick={() => setIsModalOpen(true)} style={{ cursor: 'pointer' }}>
+          <GameImage game={game} />
         </div>
         
         <div className={styles.content}>
           <div className={styles.header}>
-            <h3 
-              className={styles.title} 
-              onClick={() => setIsModalOpen(true)} 
-              style={{ cursor: 'pointer' }}
-            >
+            <h3 className={styles.title} onClick={() => setIsModalOpen(true)} style={{ cursor: 'pointer' }}>
               {game.title}
             </h3>
             <span className={styles.rating}>★ {game.rating}</span>
@@ -88,7 +69,6 @@ export const GameCard = ({ game }: GameCardProps) => {
         </div>
       </div>
 
-      {/* Вызов модального окна */}
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <GameDetailsModal game={game} />
       </Modal>

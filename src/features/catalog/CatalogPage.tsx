@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import type { Game, GameGenre, SortOption } from '../../types/game';
-import gamesData from '../../data/games.json';
+import { fetchGames } from '../../api/gamesApi';
 import { GameCard } from '../../components/GameCard/GameCard';
 import { Skeleton } from '../../components/Skeleton/Skeleton';
 import styles from './CatalogPage.module.scss';
@@ -20,41 +20,34 @@ const GENRES: { value: GameGenre | 'all'; label: string }[] = [
 
 export const CatalogPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  
-  // По умолчанию загрузка включена, чтобы при старте показать скелетоны
-  const [isLoading, setIsLoading] = useState(true);
   const [searchInput, setSearchInput] = useState(searchParams.get('q') || '');
+  
+  const [allGames, setAllGames] = useState<Game[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [visibleCount, setVisibleCount] = useState(12);
 
   const currentGenre = (searchParams.get('genre') as GameGenre | 'all') || 'all';
   const currentSort = (searchParams.get('sort') as SortOption) || 'default';
   const currentSearch = searchParams.get('q') || '';
 
-  // Имитация загрузки. Запускаем только ОДИН раз при монтировании страницы.
   useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(false), 400);
-    return () => clearTimeout(timer);
+    const loadGames = async () => {
+      setIsLoading(true);
+      setError(null);
+      try {
+        await new Promise(resolve => setTimeout(resolve, 400));
+        const data = await fetchGames();
+        setAllGames(data);
+      } catch (err) {
+        if (err instanceof Error) setError(err.message);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    loadGames();
   }, []);
 
-  // Встроенный debounce через useEffect для поля поиска
-  useEffect(() => {
-    if (searchInput === currentSearch) return;
-
-    const timer = setTimeout(() => {
-      const newParams = new URLSearchParams(searchParams);
-      if (searchInput) {
-        newParams.set('q', searchInput);
-      } else {
-        newParams.delete('q');
-      }
-      setSearchParams(newParams);
-      setIsLoading(true); // Включаем скелетоны при применении фильтра
-      setTimeout(() => setIsLoading(false), 400);
-    }, 300);
-
-    return () => clearTimeout(timer);
-  }, [searchInput, currentSearch, searchParams, setSearchParams]);
-
-  // Обновление обычных фильтров (жанр, сортировка)
   const updateParams = (key: string, value: string) => {
     const newParams = new URLSearchParams(searchParams);
     if (value && value !== 'all' && value !== 'default') {
@@ -63,84 +56,79 @@ export const CatalogPage = () => {
       newParams.delete(key);
     }
     setSearchParams(newParams);
-    setIsLoading(true); // Включаем скелетоны при смене фильтра
-    setTimeout(() => setIsLoading(false), 400);
+    setVisibleCount(12);
   };
 
-  // Фильтрация и сортировка
+  useEffect(() => {
+    if (searchInput === currentSearch) return;
+    const timer = setTimeout(() => {
+      updateParams('q', searchInput);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [searchInput, currentSearch]);
+
   const filteredGames = useMemo(() => {
-    let result = [...(gamesData as Game[])];
-
-    if (currentGenre !== 'all') {
-      result = result.filter((game) => game.genre === currentGenre);
-    }
-
-    if (currentSearch) {
-      result = result.filter((game) =>
-        game.title.toLowerCase().includes(currentSearch.toLowerCase())
-      );
-    }
-
+    let result = [...allGames];
+    if (currentGenre !== 'all') result = result.filter((game) => game.genre === currentGenre);
+    if (currentSearch) result = result.filter((game) => game.title.toLowerCase().includes(currentSearch.toLowerCase()));
     switch (currentSort) {
-      case 'priceAsc':
-        result.sort((a, b) => a.price - b.price);
-        break;
-      case 'priceDesc':
-        result.sort((a, b) => b.price - a.price);
-        break;
-      case 'rating':
-        result.sort((a, b) => b.rating - a.rating);
-        break;
+      case 'priceAsc': result.sort((a, b) => a.price - b.price); break;
+      case 'priceDesc': result.sort((a, b) => b.price - a.price); break;
+      case 'rating': result.sort((a, b) => b.rating - a.rating); break;
+      case 'titleAsc': result.sort((a, b) => a.title.localeCompare(b.title)); break;
+      case 'titleDesc': result.sort((a, b) => b.title.localeCompare(a.title)); break;
     }
-
     return result;
-  }, [currentGenre, currentSort, currentSearch]);
+  }, [allGames, currentGenre, currentSort, currentSearch]);
+
+  if (error) {
+    return (
+      <div className={styles.empty}>
+        <h2>Ошибка загрузки</h2>
+        <p>{error}</p>
+        <button onClick={() => window.location.reload()} className={styles.loadMoreBtn} style={{ marginTop: '16px' }}>
+          Попробовать снова
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.catalogPage}>
       <div className={styles.controls}>
-        <input
-          type="text"
-          className={styles.searchInput}
-          placeholder="Поиск по названию..."
-          value={searchInput}
-          onChange={(e) => setSearchInput(e.target.value)}
-        />
-        
-        <select
-          className={styles.select}
-          value={currentGenre}
-          onChange={(e) => updateParams('genre', e.target.value)}
-        >
-          {GENRES.map((g) => (
-            <option key={g.value} value={g.value}>{g.label}</option>
-          ))}
+        <input type="text" className={styles.searchInput} placeholder="Поиск по названию..." value={searchInput} onChange={(e) => setSearchInput(e.target.value)} />
+        <select className={styles.select} value={currentGenre} onChange={(e) => updateParams('genre', e.target.value)}>
+          {GENRES.map((g) => <option key={g.value} value={g.value}>{g.label}</option>)}
         </select>
-
-        <select
-          className={styles.select}
-          value={currentSort}
-          onChange={(e) => updateParams('sort', e.target.value)}
-        >
+        <select className={styles.select} value={currentSort} onChange={(e) => updateParams('sort', e.target.value)}>
           <option value="default">По умолчанию</option>
           <option value="priceAsc">Сначала дешевле</option>
           <option value="priceDesc">Сначала дороже</option>
           <option value="rating">По рейтингу</option>
+          <option value="titleAsc">По алфавиту (А-Я)</option>
+          <option value="titleDesc">По алфавиту (Я-А)</option>
         </select>
       </div>
 
       {isLoading ? (
         <div className={styles.grid}>
-          {Array.from({ length: 8 }).map((_, i) => (
-            <Skeleton key={i} className={styles.cardSkeleton} />
-          ))}
+          {Array.from({ length: 8 }).map((_, i) => <Skeleton key={i} className={styles.cardSkeleton} />)}
         </div>
       ) : filteredGames.length > 0 ? (
-        <div className={styles.grid}>
-          {filteredGames.map((game) => (
-            <GameCard key={game.id} game={game} />
-          ))}
-        </div>
+        <>
+          <div className={styles.grid}>
+            {filteredGames.slice(0, visibleCount).map((game) => (
+              <GameCard key={game.id} game={game} />
+            ))}
+          </div>
+          {visibleCount < filteredGames.length && (
+            <div className={styles.loadMoreWrapper}>
+              <button className={styles.loadMoreBtn} onClick={() => setVisibleCount(prev => prev + 12)}>
+                Показать еще
+              </button>
+            </div>
+          )}
+        </>
       ) : (
         <div className={styles.empty}>По вашему запросу ничего не найдено.</div>
       )}

@@ -44,7 +44,7 @@
   gap: 24px;
   
   @media (max-width: 480px) {
-    grid-template-columns: 1fr; // Одна колонка на маленьких экранах
+    grid-template-columns: 1fr;
   }
 }
 
@@ -57,4 +57,26 @@
   color: $text-muted;
   margin-top: 64px;
   font-size: 18px;
+}
+
+.loadMoreWrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 32px;
+}
+
+.loadMoreBtn {
+  padding: 12px 32px;
+  background-color: $bg-card;
+  color: $accent-blue;
+  border: 1px solid $accent-blue;
+  border-radius: $radius;
+  font-size: 16px;
+  font-weight: 600;
+  transition: all $transition;
+  cursor: pointer;
+
+  &:hover {
+    background-color: rgba($accent-blue, 0.1);
+  }
 }

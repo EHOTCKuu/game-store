@@ -1,3 +1,17 @@
+export interface RawGame {
+  id: number;
+  title: string;
+  thumbnail: string;
+  short_description: string;
+  genre: string;
+  platform: string;
+  publisher: string;
+  developer: string;
+  release_date: string;
+  freetogame_profile_url: string;
+  game_url: string;
+}
+
 export type GameGenre =
   | 'action'
   | 'rpg'
@@ -6,7 +20,8 @@ export type GameGenre =
   | 'adventure'
   | 'simulation'
   | 'horror'
-  | 'racing';
+  | 'racing'
+  | 'other';
 
 export interface Game {
   id: string;
@@ -19,6 +34,8 @@ export interface Game {
   releaseYear: number;
   cover: string;
   tags: string[];
+  gameUrl: string;
+  gradient: string;
 }
 
 export interface CartItem {
@@ -29,4 +46,4 @@ export interface CartItem {
   quantity: number;
 }
 
-export type SortOption = 'default' | 'priceAsc' | 'priceDesc' | 'rating';
+export type SortOption = 'default' | 'priceAsc' | 'priceDesc' | 'rating' | 'titleAsc' | 'titleDesc';
