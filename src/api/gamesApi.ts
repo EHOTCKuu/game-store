@@ -52,15 +52,15 @@ export const fetchGames = async (): Promise<Game[]> => {
     const price = generatePrice(raw.id, raw.title);
     const year = raw.release_date ? new Date(raw.release_date).getFullYear() : 2024;
 
-    let secureCoverUrl = raw.thumbnail 
+    const secureCoverUrl = raw.thumbnail 
       ? raw.thumbnail.replace(/^http:\/\//i, 'https://') 
       : '';
 
-    // ПРОКСИ ДЛЯ КАРТИНОК
-    if (secureCoverUrl) {
-      const cleanUrl = secureCoverUrl.replace(/^https?:\/\//, '');
-      secureCoverUrl = `https://images.weserv.nl/?url=${cleanUrl}&output=webp&n=-1`;
-    }
+    // ЗАКОММЕНТИРОВАЛ ПРОКСИ
+    // if (secureCoverUrl) {
+    //   const cleanUrl = secureCoverUrl.replace(/^https?:\/\//, '');
+    //   secureCoverUrl = `https://images.weserv.nl/?url=${cleanUrl}&output=webp&n=-1`;
+    // }
 
     return {
       id: String(raw.id),
