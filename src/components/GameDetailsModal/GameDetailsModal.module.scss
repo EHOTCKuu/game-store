@@ -9,10 +9,7 @@
 
 .modalOverlay {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   background: rgba($bg-dark, 0.7);
   z-index: 0;
 }
@@ -25,7 +22,7 @@
   padding: 24px;
   padding-right: 48px;
   
-  @media (max-width: 600px) {
+  @media (width <= 600px) {
     flex-direction: column;
     padding: 16px;
     padding-top: 40px;
@@ -39,7 +36,7 @@
   border-radius: $radius;
   overflow: hidden;
 
-  @media (max-width: 600px) {
+  @media (width <= 600px) {
     width: 100%;
     max-width: 365px;
     margin: 0 auto;

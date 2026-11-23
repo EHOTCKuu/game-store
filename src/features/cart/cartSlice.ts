@@ -6,7 +6,6 @@ interface CartState {
   promoCode: string | null;
 }
 
-// Пытаемся достать корзину из localStorage при старте
 const loadCartFromStorage = (): CartItem[] => {
   try {
     const saved = localStorage.getItem('cart');
@@ -64,7 +63,6 @@ const cartSlice = createSlice({
 
 export const { addToCart, removeFromCart, updateQuantity, applyPromoCode } = cartSlice.actions;
 
-// Селектор для подсчета итоговой суммы с учетом скидки
 export const selectCartTotal = (state: { cart: CartState }) => {
   const subtotal = state.cart.items.reduce((sum, item) => sum + item.price * item.quantity, 0);
   if (state.cart.promoCode === 'GAME10') {

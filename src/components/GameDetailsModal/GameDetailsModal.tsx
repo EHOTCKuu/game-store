@@ -33,7 +33,12 @@ export const GameDetailsModal = ({ game }: GameDetailsModalProps) => {
 
       <div className={styles.details}>
         <div className={styles.coverContainer}>
-          <GameImage game={game} showBackground={true} />
+          <GameImage 
+            cover={game.cover} 
+            title={game.title} 
+            gradient={game.gradient} 
+            showBackground={true} 
+          />
         </div>
         
         <div className={styles.info}>

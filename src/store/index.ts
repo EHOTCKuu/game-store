@@ -7,7 +7,6 @@ export const store = configureStore({
   },
 });
 
-// Слушаем изменения стора, чтобы сохранять корзину в localStorage
 store.subscribe(() => {
   try {
     const state = store.getState();

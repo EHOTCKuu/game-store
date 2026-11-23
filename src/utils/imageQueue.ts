@@ -10,7 +10,6 @@ class ImageQueue {
   private cache = new Set<string>();
 
   public load(url: string): Promise<void> {
-    // Если уже загружено, сразу отдаем успех
     if (this.cache.has(url)) return Promise.resolve();
 
     return new Promise((resolve, reject) => {
@@ -36,7 +35,7 @@ class ImageQueue {
       this.cache.add(item.url);
       item.resolve();
       this.isProcessing = false;
-      // Небольшая задержка между запросами, чтобы не спамить прокси
+
       setTimeout(() => this.processNext(), 150);
     };
 

@@ -26,7 +26,6 @@ export const CheckoutModal = ({ isOpen, onClose }: CheckoutModalProps) => {
   } = useForm<CheckoutFormData>();
 
   const onSubmit = (data: CheckoutFormData) => {
-    // Имитация отправки заказа на сервер (setTimeout)
     return new Promise<void>((resolve) => {
       setTimeout(() => {
         alert(`Заказ оформлен!\nИмя: ${data.name}\nEmail: ${data.email}\nСумма: ${total} ₽`);

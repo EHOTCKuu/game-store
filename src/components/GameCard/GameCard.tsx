@@ -35,7 +35,11 @@ export const GameCard = ({ game }: GameCardProps) => {
     <>
       <div className={styles.card} style={{ background: game.gradient }}>
         <div className={styles.imageWrapper} onClick={() => setIsModalOpen(true)} style={{ cursor: 'pointer' }}>
-          <GameImage game={game} />
+          <GameImage 
+            cover={game.cover} 
+            title={game.title} 
+            gradient={game.gradient} 
+          />
         </div>
         
         <div className={styles.content}>

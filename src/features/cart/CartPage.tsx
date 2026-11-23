@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { removeFromCart, updateQuantity, applyPromoCode, selectCartTotal } from './cartSlice';
 import { Button } from '../../components/Button/Button';
 import { CheckoutModal } from './CheckoutModal';
+import { GameImage } from '../../components/GameImage/GameImage';
 import styles from './CartPage.module.scss';
 
 export const CartPage = () => {
@@ -25,6 +26,15 @@ export const CartPage = () => {
     }
   };
 
+  const getCartGradient = (title: string) => {
+    let hash = 0;
+    for (let i = 0; i < title.length; i++) {
+      hash = title.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    const hue = Math.abs(hash % 360);
+    return `linear-gradient(135deg, hsl(${hue}, 40%, 15%) 0%, hsl(${hue}, 40%, 5%) 100%)`;
+  };
+
   if (items.length === 0) {
     return (
       <div className={styles.emptyState}>
@@ -41,11 +51,16 @@ export const CartPage = () => {
     <div className={styles.cartPage}>
       <div className={styles.itemsList}>
         {items.map((item) => {
-          const coverUrl = new URL(`../../assets/covers/${item.cover}`, import.meta.url).href;
-
           return (
             <div key={item.gameId} className={styles.cartItem}>
-              <img src={coverUrl} alt={item.title} className={styles.image} />
+              
+              <div className={styles.cartImageWrapper}>
+                <GameImage 
+                  cover={item.cover} 
+                  title={item.title} 
+                  gradient={getCartGradient(item.title)} 
+                />
+              </div>
               
               <div className={styles.itemInfo}>
                 <h3>{item.title}</h3>
@@ -57,6 +72,7 @@ export const CartPage = () => {
                   className={styles.quantityBtn}
                   onClick={() => dispatch(updateQuantity({ gameId: item.gameId, quantity: item.quantity - 1 }))}
                   disabled={item.quantity <= 1}
+                  aria-label="Удалить 1 единицу товара"
                 >
                   -
                 </button>
@@ -64,6 +80,7 @@ export const CartPage = () => {
                 <button 
                   className={styles.quantityBtn}
                   onClick={() => dispatch(updateQuantity({ gameId: item.gameId, quantity: item.quantity + 1 }))}
+                  aria-label="Добавить 1 единицу товара"
                 >
                   +
                 </button>
@@ -77,6 +94,7 @@ export const CartPage = () => {
                 className={styles.removeBtn}
                 onClick={() => dispatch(removeFromCart(item.gameId))}
                 title="Удалить из корзины"
+                aria-label="Удалить товар"
               >
                 ✕
               </button>

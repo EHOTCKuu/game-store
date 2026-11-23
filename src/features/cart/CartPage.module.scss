@@ -8,7 +8,7 @@
   margin: 0 auto;
   align-items: flex-start;
   
-  @media (max-width: 768px) {
+  @media (width <= 768px) {
     flex-direction: column;
     padding: 16px;
   }
@@ -29,8 +29,8 @@
   padding: 16px;
   border-radius: $radius;
   
-  @media (max-width: 500px) {
-    flex-wrap: wrap; // Позволяет элементам переноситься на новую строку на узких экранах
+  @media (width <= 500px) {
+    flex-wrap: wrap
   }
 }
 
@@ -44,7 +44,7 @@
 
 .itemInfo {
   flex-grow: 1;
-  min-width: 120px; // Чтобы текст не сжимался слишком сильно
+  min-width: 120px;
   
   h3 {
     font-size: 16px;
@@ -108,7 +108,7 @@
   flex-direction: column;
   gap: 16px;
   
-  @media (max-width: 768px) {
+  @media (width <= 768px) {
     width: 100%;
   }
   
@@ -120,12 +120,12 @@
 .promoBlock {
   display: flex;
   gap: 8px;
-  width: 100%; // Занимает всю ширину контейнера
+  width: 100%;
 }
 
 .promoInput {
-  flex: 1; // Растягивает инпут на оставшееся место
-  min-width: 0; // Важно! Не дает инпуту вылезать за пределы flex-контейнера
+  flex: 1;
+  min-width: 0;
   padding: 8px 12px;
   background-color: $bg-dark;
   border: 1px solid rgba($text-muted, 0.2);
@@ -138,9 +138,8 @@
   }
 }
 
-// Кнопка "Применить" (если она у тебя с классом)
 .promoBlock button {
-  flex-shrink: 0; // Запрещаем кнопке сжиматься
+  flex-shrink: 0;
   padding: 8px 12px;
 }
 
@@ -181,3 +180,28 @@
     margin-bottom: 8px;
   }
 }
+
+
+.cartItem {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background-color: $bg-card;
+  padding: 16px;
+  border-radius: $radius;
+  
+  @media (width <= 500px) {
+    flex-wrap: wrap;
+  }
+}
+
+.cartImageWrapper {
+  width: 100px;
+  height: 56px;
+  border-radius: 6px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+
+

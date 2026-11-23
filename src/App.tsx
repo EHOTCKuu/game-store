@@ -2,13 +2,12 @@ import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-do
 import { CatalogPage } from './features/catalog/CatalogPage';
 import { CartPage } from './features/cart/CartPage';
 import { useAppSelector } from './store/hooks';
-import './App.css'; // Можешь почистить дефолтный App.css или оставить как есть
+import './App.css';
 
 const Header = () => {
   const items = useAppSelector((state) => state.cart.items);
   const location = useLocation();
   
-  // Считаем общее количество товаров в корзине
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
 
   return (

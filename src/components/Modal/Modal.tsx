@@ -9,29 +9,39 @@ interface ModalProps {
 }
 
 export const Modal = ({ isOpen, onClose, children }: ModalProps) => {
-  // Блокируем скролл страницы, пока открыта модалка
   useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+
     if (isOpen) {
+      document.addEventListener('keydown', handleKeyDown);
       document.body.style.overflow = 'hidden';
     }
+    
     return () => {
+      document.removeEventListener('keydown', handleKeyDown);
       document.body.style.overflow = 'unset';
     };
-  }, [isOpen]);
+  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
-  // Закрываем по клику на темный фон (оверлей)
-  const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (e.target === e.currentTarget) {
-      onClose();
-    }
-  };
-
   return createPortal(
-    <div className={styles.overlay} onClick={handleOverlayClick}>
-      <div className={styles.modalContent}>
-        <button className={styles.closeBtn} onClick={onClose}>✕</button>
+    <div className={styles.overlay} onClick={onClose}>
+      <div 
+        className={styles.modalContent} 
+        onClick={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+      >
+        <button 
+          className={styles.closeBtn} 
+          onClick={onClose}
+          aria-label="Закрыть окно"
+        >
+          ✕
+        </button>
         {children}
       </div>
     </div>,
