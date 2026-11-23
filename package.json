@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "lint:styles": "stylelint \"src/**/*.scss\"",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "covers": "node scripts/download-covers.mjs"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.15.0",

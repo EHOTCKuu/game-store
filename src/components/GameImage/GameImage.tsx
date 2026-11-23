@@ -1,74 +1,61 @@
-import { useState, useEffect, useRef } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import styles from './GameImage.module.scss';
 
 interface GameImageProps {
   cover: string;
+  coverFallback?: string;
   title: string;
   gradient: string;
   className?: string;
   showBackground?: boolean;
 }
 
-let isDownloading = false;
-const downloadQueue: (() => void)[] = [];
+const MAX_ATTEMPTS_PER_SOURCE = 2;
 
-const processQueue = () => {
-  if (isDownloading || downloadQueue.length === 0) return;
-  isDownloading = true;
-  const next = downloadQueue.shift();
-  if (next) {
-    next();
-    setTimeout(() => {
-      isDownloading = false;
-      processQueue();
-    }, 300);
-  }
-};
+const RETRY_DELAY_MS = 700;
 
-export const GameImage = ({ cover, title, gradient, className = '', showBackground = false }: GameImageProps) => {
+function GameImageContent({
+  cover,
+  coverFallback,
+  title,
+  gradient,
+  className = '',
+  showBackground = false,
+}: GameImageProps) {
+  const sources = useMemo(
+    () => [cover, coverFallback].filter((src): src is string => Boolean(src)),
+    [cover, coverFallback],
+  );
+
+  const [sourceIndex, setSourceIndex] = useState(0);
+  const [attempt, setAttempt] = useState(0);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [hasError, setHasError] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const [isFailed, setIsFailed] = useState(false);
 
-  useEffect(() => {
-    if (!cover || hasError || isLoaded) return;
+  const src = sources[Math.min(sourceIndex, sources.length - 1)];
+  const hasError = isFailed || !src;
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            downloadQueue.push(() => {
-              const img = new Image();
-              img.onload = () => {
-                setIsLoaded(true);
-                setHasError(false);
-              };
-              img.onerror = () => {
-                setHasError(true);
-              };
-              img.src = cover;
-            });
-            processQueue();
-            
-            if (containerRef.current) {
-              observer.unobserve(containerRef.current);
-            }
-          }
-        });
-      },
-      { rootMargin: '100px' }
-    );
+  const handleLoad = useCallback(() => {
+    setIsLoaded(true);
+  }, []);
 
-    if (containerRef.current) {
-      observer.observe(containerRef.current);
+  const handleError = useCallback(() => {
+
+    if (attempt + 1 < MAX_ATTEMPTS_PER_SOURCE) {
+      window.setTimeout(() => setAttempt((value) => value + 1), RETRY_DELAY_MS);
+      return;
     }
 
-    return () => {
-      observer.disconnect();
-    };
-  }, [cover, hasError, isLoaded]);
+    if (sourceIndex + 1 < sources.length) {
+      setSourceIndex((value) => value + 1);
+      setAttempt(0);
+      return;
+    }
 
-  if (!cover || hasError) {
+    setIsFailed(true);
+  }, [attempt, sourceIndex, sources.length]);
+
+  if (hasError) {
     return (
       <div className={`${styles.container} ${className}`} style={{ background: gradient }}>
         <div className={styles.fallback}>{title.charAt(0).toUpperCase()}</div>
@@ -77,22 +64,29 @@ export const GameImage = ({ cover, title, gradient, className = '', showBackgrou
   }
 
   return (
-    <div className={`${styles.container} ${className}`} style={{ background: gradient }} ref={containerRef}>
+    <div className={`${styles.container} ${className}`} style={{ background: gradient }}>
       {showBackground && isLoaded && (
-        <div className={styles.background} style={{ backgroundImage: `url(${cover})` }} />
+        <div className={styles.background} style={{ backgroundImage: `url("${src}")` }} />
       )}
 
-      <div className={styles.fallback}>
-        {title.charAt(0).toUpperCase()}
-      </div>
+      <div className={styles.fallback}>{title.charAt(0).toUpperCase()}</div>
 
-      {isLoaded && (
-        <img
-          src={cover}
-          alt={title}
-          className={styles.image}
-        />
-      )}
+      <img
+        key={`${src}#${attempt}`}
+        src={src}
+        alt={title}
+        className={styles.image}
+        loading="lazy"
+        decoding="async"
+        referrerPolicy="no-referrer"
+        onLoad={handleLoad}
+        onError={handleError}
+        style={{ opacity: isLoaded ? 1 : 0 }}
+      />
     </div>
   );
-};
+}
+
+export const GameImage = (props: GameImageProps) => (
+  <GameImageContent key={props.cover} {...props} />
+);

@@ -36,6 +36,7 @@ export interface Game {
   tags: string[];
   gameUrl: string;
   gradient: string;
+  coverFallback?: string;
 }
 
 export interface CartItem {
