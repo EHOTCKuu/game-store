@@ -13,6 +13,15 @@
   flex-wrap: wrap;
 }
 
+.searchInput {
+  flex-grow: 1;
+  min-width: 200px;
+}
+
+.select {
+  cursor: pointer;
+}
+
 .searchInput,
 .select {
   padding: 10px 16px;
@@ -27,15 +36,6 @@
   &:focus {
     border-color: $accent-blue;
   }
-}
-
-.searchInput {
-  flex-grow: 1;
-  min-width: 200px;
-}
-
-.select {
-  cursor: pointer;
 }
 
 .grid {

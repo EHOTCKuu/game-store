@@ -30,7 +30,7 @@
   border-radius: $radius;
   
   @media (width <= 500px) {
-    flex-wrap: wrap
+    flex-wrap: wrap;
   }
 }
 
@@ -178,20 +178,6 @@
   p {
     color: $text-muted;
     margin-bottom: 8px;
-  }
-}
-
-
-.cartItem {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  background-color: $bg-card;
-  padding: 16px;
-  border-radius: $radius;
-  
-  @media (width <= 500px) {
-    flex-wrap: wrap;
   }
 }
 

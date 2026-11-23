@@ -45,16 +45,111 @@
   }
 }
 
-.info { display: flex; flex-direction: column; flex-grow: 1; min-width: 0; }
-.header { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; margin-bottom: 16px; h2 { font-size: 28px; line-height: 1.2; } }
-.rating { color: $accent-blue; font-size: 20px; font-weight: 700; white-space: nowrap; }
-.tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
-.tag { background-color: $bg-dark; color: $text-muted; padding: 4px 12px; border-radius: 20px; font-size: 13px; }
-.description { color: $text-main; font-size: 16px; line-height: 1.6; margin-bottom: 32px; }
-.footer { margin-top: auto; display: flex; justify-content: space-between; align-items: center; padding-top: 24px; border-top: 1px solid rgba($text-muted, 0.2); }
-.priceBlock { display: flex; flex-direction: column; }
-.oldPrice { font-size: 16px; color: $text-muted; text-decoration: line-through; }
-.price { font-size: 28px; font-weight: 700; color: $accent-blue; }
-.counter { display: flex; align-items: center; background-color: $bg-dark; border-radius: $radius; border: 1px solid rgba($text-muted, 0.2); overflow: hidden; }
-.counterBtn { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; color: $accent-blue; font-size: 18px; font-weight: bold; background: transparent; transition: background-color $transition; &:hover { background-color: rgba($accent-blue, 0.1); } }
-.counterValue { width: 40px; text-align: center; font-size: 16px; font-weight: 600; user-select: none; }
+.info { 
+  display: flex; 
+  flex-direction: column; 
+  flex-grow: 1; 
+  min-width: 0; 
+}
+
+.header { 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: flex-start; 
+  gap: 16px; 
+  margin-bottom: 16px; 
+  
+  h2 { 
+    font-size: 28px; 
+    line-height: 1.2; 
+  } 
+}
+
+.rating { 
+  color: $accent-blue; 
+  font-size: 20px; 
+  font-weight: 700; 
+  white-space: nowrap; 
+}
+
+.tags { 
+  display: flex; 
+  flex-wrap: wrap; 
+  gap: 8px; 
+  margin-bottom: 24px; 
+}
+
+.tag { 
+  background-color: $bg-dark; 
+  color: $text-muted; 
+  padding: 4px 12px; 
+  border-radius: 20px; 
+  font-size: 13px; 
+}
+
+.description { 
+  color: $text-main; 
+  font-size: 16px; 
+  line-height: 1.6; 
+  margin-bottom: 32px; 
+}
+
+.footer { 
+  margin-top: auto; 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  padding-top: 24px; 
+  border-top: 1px solid rgba($text-muted, 0.2); 
+}
+
+.priceBlock { 
+  display: flex; 
+  flex-direction: column; 
+}
+
+.oldPrice { 
+  font-size: 16px; 
+  color: $text-muted; 
+  text-decoration: line-through; 
+}
+
+.price { 
+  font-size: 28px; 
+  font-weight: 700; 
+  color: $accent-blue; 
+}
+
+.counter { 
+  display: flex; 
+  align-items: center; 
+  background-color: $bg-dark; 
+  border-radius: $radius; 
+  border: 1px solid rgba($text-muted, 0.2); 
+  overflow: hidden; 
+}
+
+.counterBtn { 
+  width: 40px; 
+  height: 40px; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  color: $accent-blue; 
+  font-size: 18px; 
+  font-weight: bold; 
+  background: transparent; 
+  transition: background-color $transition; 
+
+  &:hover { 
+    background-color: rgba($accent-blue, 0.1); 
+  }
+}
+
+.counterValue { 
+  width: 40px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 600;
+  user-select: none; 
+}
